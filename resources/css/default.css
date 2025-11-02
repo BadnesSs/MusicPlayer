@@ -1,0 +1,57 @@
+.root {
+    -fx-font-family: "Verdana";
+    -fx-background-color: white;
+}
+
+.grey-background {
+    -fx-background-color: #f0f0f0;
+}
+
+
+
+.table-view {
+    -fx-background-color: white;
+    -fx-selection-bar: #e5fffe;
+    -fx-selection-bar-text: black;
+    -fx-selection-bar-non-focused: #e5fffe;
+    -fx-selection-bar-text-non-focused: black;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+}
+
+.table-view .table-row-cell:empty {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-view .table-row-cell:selected,
+.table-view .table-row-cell:focused:selected {
+    -fx-background-color: #e5fffe;
+    -fx-text-fill: black;
+}
+
+
+
+.list-view {
+    -fx-background-color: white;
+    -fx-border-width: 0 1 0 0;
+    -fx-border-color: #f0f0f0;
+
+    -fx-selection-bar: #e5fffe;
+    -fx-selection-bar-text: black;
+    -fx-selection-bar-non-focused: #e5fffe;
+    -fx-selection-bar-text-non-focused: black;
+}
+
+.list-view .list-cell {
+    -fx-background-color: white;
+}
+
+.list-view .list-cell:selected,
+ .list-view .list-cell:focused:selected {
+    -fx-background-color: #e5fffe;
+    -fx-text-fill: black;
+}

@@ -1,0 +1,101 @@
+.button {
+    -fx-background-color: transparent;
+}
+
+.toggle-button {
+    -fx-background-color: transparent;
+}
+
+
+
+.toggle-button.playpause .image-view {
+    -fx-image: url("../Icons/PlayButton.png");
+}
+
+.toggle-button.playpause:hover .image-view {
+    -fx-image: url("../Icons/PlayButtonHover.png");
+}
+
+.toggle-button.playpause:selected .image-view {
+    -fx-image: url("../Icons/PauseButton.png");
+}
+
+.toggle-button.playpause:selected:hover .image-view {
+    -fx-image: url("../Icons/PauseButtonHover.png");
+}
+
+
+
+.button.prev .image-view {
+    -fx-image: url("../Icons/PreviousButton.png");
+}
+
+.button.prev:hover .image-view {
+    -fx-image: url("../Icons/PreviousButtonHover.png");
+}
+
+
+
+.button.next .image-view {
+    -fx-image: url("../Icons/NextButton.png");
+}
+
+.button.next:hover .image-view {
+    -fx-image: url("../Icons/NextButtonHover.png");
+}
+
+
+
+.button.shuffle .image-view {
+    -fx-image: url("../Icons/ShuffleButton.png");
+}
+
+.button.shuffle:hover .image-view {
+    -fx-image: url("../Icons/ShuffleButtonHover.png");
+}
+
+
+
+.toggle-button.repeat .image-view {
+    -fx-image: url("../Icons/RepeatButton.png");
+}
+
+.toggle-button.repeat:hover .image-view {
+    -fx-image: url("../Icons/RepeatButtonHover.png");
+}
+
+.toggle-button.repeat:selected .image-view {
+    -fx-image: url("../Icons/RepeatOneButton.png");
+}
+
+.toggle-button.repeat:selected:hover .image-view {
+    -fx-image: url("../Icons/RepeatOneButtonHover.png");
+}
+
+
+
+.button.random .image-view {
+    -fx-image: url("../Icons/RandomButton.png");
+}
+
+.button.random:hover .image-view {
+    -fx-image: url("../Icons/RandomButtonHover.png");
+}
+
+
+
+.toggle-button.volume .image-view {
+    -fx-image: url("../Icons/VolumeButton.png");
+}
+
+.toggle-button.volume:hover .image-view {
+    -fx-image: url("../Icons/VolumeButtonHover.png");
+}
+
+.toggle-button.volume:selected .image-view {
+    -fx-image: url("../Icons/MuteButton.png");
+}
+
+.toggle-button.volume:selected:hover .image-view {
+    -fx-image: url("../Icons/MuteButtonHover.png");
+}

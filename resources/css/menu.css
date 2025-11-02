@@ -1,0 +1,13 @@
+.menu-button {
+    -fx-background-color: transparent;
+
+    -fx-min-height: 25px;
+    -fx-pref-height: 25px;
+    -fx-max-height: 25px;
+
+    -fx-padding: 0;
+}
+
+.menu-button:hover {
+    -fx-background-color: #e0e0e0;
+}
