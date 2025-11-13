@@ -56,10 +56,6 @@
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
             </Button>
-            <Button fx:id="randomButton" mnemonicParsing="false" styleClass="random" stylesheets="@../css/buttons.css">
-               <graphic>
-                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
-               </graphic></Button>
          </children>
          <HBox.margin>
             <Insets />

@@ -2,7 +2,6 @@ package main;
 
 import containers.Playlist;
 
-import containers.Song;
 import javafx.fxml.FXML;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -63,7 +63,6 @@ public class LibraryMenu extends VBox {
         musicPlayer.currentPlaylistProperty().addListener((obs, oldPlaylist, newPlaylist) -> listView.refresh());
 
         musicPlayer.currentPlaylistProperty().set(mainPlaylist);
-        listView.refresh();
     }
 
     public void addPlaylist(Playlist playlist) {
@@ -108,9 +107,11 @@ public class LibraryMenu extends VBox {
 
                     Image image = null;
                     try {
-                        String path = playlist.getThumbnailPath();
+                        String path = playlist.getFilePath();
                         if (path != null && !path.isEmpty()) {
-                            image = new Image(new File(path).toURI().toString());
+                            File file = new File(path);
+
+                            image = new Image(file.toURI().toString());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

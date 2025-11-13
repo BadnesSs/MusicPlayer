@@ -5,7 +5,12 @@ public class Playlist {
     public Playlist(int id, String name) {
         this.id = id;
         this.name = name;
-        // this.imagePath = imagePath;
+    }
+
+    public Playlist(int id, String name, String thumbnailPath) {
+        this.id = id;
+        this.name = name;
+        this.filePath = thumbnailPath;
     }
 
     private int id;
@@ -15,6 +20,6 @@ public class Playlist {
     private String name;
     public String getName() { return name; }
 
-    private String thumbnailPath;
-    public String getThumbnailPath() { return thumbnailPath; }
+    private String filePath;
+    public String getFilePath() { return filePath; }
 }

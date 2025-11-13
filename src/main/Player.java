@@ -41,7 +41,6 @@ public class Player extends HBox {
 
     @FXML private Button shuffleButton;
     @FXML private Button repeatButton;
-    @FXML private Button randomButton;
 
     @FXML private Label currentTime;
     @FXML private Slider progressSlider;
@@ -74,7 +73,6 @@ public class Player extends HBox {
     public void initializeSecondaryButtons() {
         shuffleButton.setOnAction(evt -> shuffle());
         repeatButton.setOnAction(evt -> repeat());
-        randomButton.setOnAction(evt -> random());
     }
 
     private void initializeTimeLabels() {
@@ -162,11 +160,6 @@ public class Player extends HBox {
 
 
 
-    private void play() {
-        musicPlayer.play();
-        setupProgressSlider();
-    }
-
     private void playOrPause() {
         musicPlayer.playOrPause();
         setupProgressSlider();
@@ -216,13 +209,6 @@ public class Player extends HBox {
         if (musicPlayer != null) {
             musicPlayer.setRepeatMode(repeatMode);
         }
-    }
-
-    private void random() {
-        playpauseButton.setSelected(true);
-        musicPlayer.stop();
-        musicPlayer.playlist.moveRandom();
-        play();
     }
 
 
@@ -311,4 +297,40 @@ public class Player extends HBox {
             volumeButton.setSelected(false);
         }
     }
+
+
+
+    /*
+     * Deprecated features
+     * will be deleted later
+     * FXML elements are already removed
+     */
+
+
+
+    /*
+    @FXML private Button randomButton;
+
+    public void initializeSecondaryButtons() {
+        shuffleButton.setOnAction(evt -> shuffle());
+        repeatButton.setOnAction(evt -> repeat());
+        randomButton.setOnAction(evt -> random());
+    }
+
+    private void random() {
+        playpauseButton.setSelected(true);
+        musicPlayer.stop();
+        musicPlayer.playlist.moveRandom();
+        play();
+    }
+     */
+
+
+
+    /*
+    private void play() {
+        musicPlayer.play();
+        setupProgressSlider();
+    }
+     */
 }

@@ -100,10 +100,11 @@ public class Database {
 
 
     public void addPlaylist(Playlist playlist) {
-        String sql = "INSERT INTO playlists(name) VALUES (?)";
+        String sql = "INSERT INTO playlists(name, filepath) VALUES (?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, playlist.getName());
+            statement.setString(2, playlist.getFilePath());
             statement.executeUpdate();
 
             try (ResultSet resultSet = statement.getGeneratedKeys()) {
@@ -142,8 +143,9 @@ public class Database {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
+                String filepath = resultSet.getString("filepath");
 
-                Playlist playlist = new Playlist(id, name);
+                Playlist playlist = new Playlist(id, name, filepath);
                 playlists.add(playlist);
             }
 
