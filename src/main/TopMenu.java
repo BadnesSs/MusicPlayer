@@ -151,7 +151,7 @@ public class TopMenu extends HBox {
             Window window = fileMenu.getScene().getWindow();
 
             CreatePlaylistMenu createPlaylistMenu = loader.getController();
-            createPlaylistMenu.initializeCreatePlaylistMenu(window, parent, database, libraryMenu);
+            createPlaylistMenu.initializeCreatePlaylistMenu(window, parent, database, musicPlayer, libraryMenu);
 
         }   catch (Exception e) {
             e.printStackTrace();

@@ -169,21 +169,50 @@ public class MusicPlayer {
         });
     }
 
+    /*
+     * TODO DOCUMENTATION
+     */
     public boolean previous() {
-        if (playlist.previous(repeatMode != RepeatMode.ALL)) {
+        if (playlistSequence.size() == 1) {
+            playlist.previous(true);
+
+        } else if (playlist.previous(repeatMode != RepeatMode.ALL)) {
             setCurrentSong(playlist.get());
             return true;
         }
+
+        playlistIndex = (playlistIndex - 1 + playlistSequence.size()) % playlistSequence.size();
+        Playlist previousPlaylist = playlistSequence.get(playlistIndex);
+        if (!(previousPlaylist.getId() == 0 && !database.getSongs().isEmpty()) && database.getPlaylistSize(previousPlaylist) == 0) {
+            if (playlistSequence.size() == 2) {
+                playlist.previous(true);
+            }
+            playlistIndex = (playlistIndex - 1 + playlistSequence.size()) % playlistSequence.size();
+            previousPlaylist = playlistSequence.get(playlistIndex);
+        }
+        setCurrentPlaylist(previousPlaylist);
+        setCurrentSong(playlist.get());
         return false;
     }
 
     public boolean next() {
-        if (playlist.next(repeatMode != RepeatMode.ALL)) {
+        if (playlistSequence.size() == 1) {
+            playlist.next(true);
+
+        } else if (playlist.next(repeatMode != RepeatMode.ALL)) {
             setCurrentSong(playlist.get());
             return true;
         }
+
         playlistIndex = (playlistIndex + 1) % playlistSequence.size();
         Playlist nextPlaylist = playlistSequence.get(playlistIndex);
+        if (!(nextPlaylist.getId() == 0 && !database.getSongs().isEmpty()) && database.getPlaylistSize(nextPlaylist) == 0) {
+            if (playlistSequence.size() == 2) {
+                playlist.next(true);
+            }
+            playlistIndex = (playlistIndex + 1) % playlistSequence.size();
+            nextPlaylist = playlistSequence.get(playlistIndex);
+        }
         setCurrentPlaylist(nextPlaylist);
         setCurrentSong(playlist.get());
         return false;
@@ -261,7 +290,6 @@ public class MusicPlayer {
     public ArrayList<Playlist> getPlaylistSequence() { return this.playlistSequence; }
     public void setPlaylistSequence(ArrayList<Playlist> playlists) {
         this.playlistSequence = playlists;
-        //this.playlistIndex = 0;
 
         for(int i = 0; i < playlists.size(); i++) {
             if (playlists.get(i).getId() == getCurrentPlaylist().getId()) {

@@ -22,12 +22,12 @@ import java.util.Collections;
 
 public class LibraryMenu extends VBox {
 
-    Database database;
-    MusicPlayer musicPlayer;
+    private Database database;
+    private MusicPlayer musicPlayer;
 
-    Library library;
+    private Library library;
 
-    ObservableList<Playlist> playlistList;
+    private ObservableList<Playlist> playlistList;
 
     @FXML private Button shufflePlaylistButton;
     @FXML private ListView<Playlist> listView;
@@ -146,6 +146,7 @@ public class LibraryMenu extends VBox {
                Playlist selectedPlaylist = listView.getSelectionModel().getSelectedItem();
                 if (selectedPlaylist != null) {
                     playlistList.remove(selectedPlaylist);
+                    musicPlayer.getPlaylistSequence().remove(selectedPlaylist);
                     database.deletePlaylist(selectedPlaylist);
                 }
            }

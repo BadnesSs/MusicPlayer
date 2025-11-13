@@ -204,4 +204,28 @@ public class Database {
 
         return songs;
     }
+
+
+
+    public int getPlaylistSize(Playlist playlist) {
+        String sql = "SELECT COUNT(*) FROM playlist_songs WHERE playlist_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, playlist.getId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int size = resultSet.getInt(1);
+                System.out.println(size);
+                return size;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }

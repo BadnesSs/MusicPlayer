@@ -14,6 +14,7 @@ import javafx.stage.*;
 
 import main.Database;
 import main.LibraryMenu;
+import main.MusicPlayer;
 
 import java.io.File;
 
@@ -21,6 +22,7 @@ import java.io.File;
 public class CreatePlaylistMenu {
 
     private Database database;
+    private MusicPlayer musicPlayer;
     private LibraryMenu libraryMenu;
 
     private final SimpleStringProperty name = new SimpleStringProperty();
@@ -33,8 +35,10 @@ public class CreatePlaylistMenu {
 
     public CreatePlaylistMenu() {}
 
-    public void initializeCreatePlaylistMenu(Window window, Parent parent, Database database, LibraryMenu libraryMenu) {
+    public void initializeCreatePlaylistMenu(Window window, Parent parent, Database database, MusicPlayer musicPlayer, LibraryMenu libraryMenu) {
         this.database = database;
+        this.musicPlayer = musicPlayer;
+
         this.libraryMenu = libraryMenu;
 
         /*
@@ -99,5 +103,7 @@ public class CreatePlaylistMenu {
 
         database.addPlaylist(playlist);
         libraryMenu.addPlaylist(playlist);
+        musicPlayer.getPlaylistSequence().add(playlist);
+
     }
 }
