@@ -15,8 +15,7 @@ public class FolderScanner {
                 if (file.isFile() &&
                    (file.getName().toLowerCase().endsWith(".mp3") ||
                     file.getName().toLowerCase().endsWith(".wav") ||
-                    file.getName().toLowerCase().endsWith(".aac") ||
-                    file.getName().toLowerCase().endsWith(".pcm"))
+                    file.getName().toLowerCase().endsWith(".aiff"))
                 ) {
                     folderQueue.add(file);
                     System.out.println(file.getName());

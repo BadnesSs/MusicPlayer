@@ -56,19 +56,37 @@
 
 
 
-.toggle-button.repeat .image-view {
+.button.shuffle-playlists .image-view {
+    -fx-image: url("../Icons/LibraryMenu/ShufflePlaylistsButton.png");
+}
+
+.button.shuffle-playlists:hover .image-view {
+    -fx-image: url("../Icons/LibraryMenu/ShufflePlaylistsButtonHover.png");
+}
+
+
+
+.button.repeat .image-view {
     -fx-image: url("../Icons/RepeatButton.png");
 }
 
-.toggle-button.repeat:hover .image-view {
+.button.repeat:hover .image-view {
     -fx-image: url("../Icons/RepeatButtonHover.png");
 }
 
-.toggle-button.repeat:selected .image-view {
+.button.repeat-all .image-view {
+    -fx-image: url("../Icons/RepeatAllButton.png");
+}
+
+.button.repeat-all:hover .image-view {
+    -fx-image: url("../Icons/RepeatAllButtonHover.png");
+}
+
+.button.repeat-one .image-view {
     -fx-image: url("../Icons/RepeatOneButton.png");
 }
 
-.toggle-button.repeat:selected:hover .image-view {
+.button.repeat-one:hover .image-view {
     -fx-image: url("../Icons/RepeatOneButtonHover.png");
 }
 

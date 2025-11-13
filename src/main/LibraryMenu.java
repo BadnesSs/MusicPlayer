@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ListView;
@@ -15,8 +16,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class LibraryMenu extends VBox {
@@ -28,6 +29,7 @@ public class LibraryMenu extends VBox {
 
     ObservableList<Playlist> playlistList;
 
+    @FXML private Button shufflePlaylistButton;
     @FXML private ListView<Playlist> listView;
 
     public LibraryMenu() {
@@ -39,6 +41,13 @@ public class LibraryMenu extends VBox {
         this.musicPlayer = musicPlayer;
         this.library = library;
 
+
+
+        /*
+         * Load Playlists from Database
+         * Add "Library" Playlist at the top
+         * Setup the cell factory and deletion handler
+         */
         playlistList = FXCollections.observableArrayList(database.getPlaylists());
         Playlist mainPlaylist = new Playlist(0, "Library");
         playlistList.addFirst(mainPlaylist);
@@ -46,6 +55,15 @@ public class LibraryMenu extends VBox {
 
         setupCellFactory();
         setupDeletionHandler();
+
+        shufflePlaylistButton.setOnAction(evt -> shuffle());
+
+        //
+        musicPlayer.setPlaylistSequence(new ArrayList<>(playlistList));
+        musicPlayer.currentPlaylistProperty().addListener((obs, oldPlaylist, newPlaylist) -> listView.refresh());
+
+        musicPlayer.currentPlaylistProperty().set(mainPlaylist);
+        listView.refresh();
     }
 
     public void addPlaylist(Playlist playlist) {
@@ -68,19 +86,12 @@ public class LibraryMenu extends VBox {
                 container.getChildren().addAll(thumbnail, nameLabel);
             }
 
-            // Double click to open CreatePlaylistMenu
+            // Double click to open playlist
             {
                 setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2 && (!isEmpty())) {
 
                         Playlist playlist = getItem();
-                        ArrayList<Song> songs;
-                        if (playlist.getId() != 0)
-                            songs = database.getSongsInPlaylist(playlist);
-                        else
-                            songs = database.getSongs();
-
-                        musicPlayer.playlist.rebuildFrom(songs);
                         library.onPlaylistChanged(playlist);
                     }
                 });
@@ -116,6 +127,13 @@ public class LibraryMenu extends VBox {
                     thumbnail.setImage(image);
                     container.setAlignment(Pos.CENTER);
                     setGraphic(container);
+
+                    // --- Update style ---
+                    if (playlist == musicPlayer.getCurrentPlaylist()) {
+                        setStyle("-fx-background-color: #f0f0f0;");
+                    } else {
+                        setStyle("");
+                    }
                 }
             }
         });
@@ -131,5 +149,11 @@ public class LibraryMenu extends VBox {
                 }
            }
         });
+    }
+
+    private void shuffle() {
+        ArrayList<Playlist> playlists = musicPlayer.getPlaylistSequence();
+        Collections.shuffle(playlists);
+        musicPlayer.setPlaylistSequence(playlists);
     }
 }

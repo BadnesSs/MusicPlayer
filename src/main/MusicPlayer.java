@@ -1,5 +1,6 @@
 package main;
 
+import containers.Playlist;
 import containers.Song;
 import data_structures_algorithms.CircularDoublyLinkedList;
 
@@ -18,19 +19,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Stack;
 
+
+
 public class MusicPlayer {
 
     public MusicPlayer(Database database) {
 
         this.database = database;
 
-        //setupVolumeListener();
-
         playlist = new CircularDoublyLinkedList<>();
         ArrayList<Song> songs = database.getSongs();
 
         playlist.rebuildFrom(songs);
         setCurrentSong(playlist.get());
+        setCurrentPlaylist(new Playlist(0, "Library"));
 
         Song song = playlist.get();
         if (song != null) {
@@ -45,14 +47,6 @@ public class MusicPlayer {
                 });
             });
         }
-    }
-
-    private void setupVolumeListener() {
-        volume.addListener((obs, oldValue, newValue) -> {
-            if (mediaPlayer != null) {
-                mediaPlayer.setVolume(newValue.doubleValue()/100.);
-            }
-        });
     }
 
 
@@ -90,9 +84,8 @@ public class MusicPlayer {
 
     public CircularDoublyLinkedList<Song> playlist;
 
-    private boolean bRepeating = false;
-    public void setRepeating(boolean repeating) { this.bRepeating = repeating; }
-    public boolean getRepeating() { return bRepeating; }
+    private RepeatMode repeatMode = RepeatMode.OFF;
+    public void setRepeatMode(RepeatMode repeatMode) { this.repeatMode = repeatMode; }
 
 
 
@@ -104,12 +97,12 @@ public class MusicPlayer {
 
         if (mediaPlayer == null) {
             play();
+
         } else {
-            // cia
             MediaPlayer.Status status = actualStatus.get();
-            System.out.println(status.toString());
             if (status == MediaPlayer.Status.PLAYING) {
                 mediaPlayer.pause();
+
             } else {
                 mediaPlayer.play();
             }
@@ -138,18 +131,28 @@ public class MusicPlayer {
         mediaPlayer.statusProperty().addListener(statusListener);
         actualStatus.set(mediaPlayer.getStatus());
 
+
+
         mediaPlayer.setOnEndOfMedia(() -> {
-            if(!bRepeating) next();
-            play();
+            if (repeatMode == RepeatMode.OFF) {
+                next();
+                play();
+
+            } else if (repeatMode == RepeatMode.ALL) {
+               if (next()) {
+                   play();
+
+               } else {
+               }
+
+            } else if (repeatMode == RepeatMode.ONE) {
+                play();
+            }
         });
 
-        /*
-        mediaPlayer.setVolume(volume.get()/100.);
 
-         */
 
         mediaPlayer.volumeProperty().bind(volume.divide(100.));
-        System.out.println(volume.get()/100.);
         mediaPlayer.play();
 
         if (onSongChanged != null) {
@@ -166,23 +169,27 @@ public class MusicPlayer {
         });
     }
 
-    public void previous() {
-        playlist.previous();
-        setCurrentSong(playlist.get());
-    }
-
-    public void next() {
-        playlist.next();
-        setCurrentSong(playlist.get());
-    }
-
-
-
-    public void setVolume(double value) {
-        if (mediaPlayer != null) {
-            mediaPlayer.setVolume(value/100.);
+    public boolean previous() {
+        if (playlist.previous(repeatMode != RepeatMode.ALL)) {
+            setCurrentSong(playlist.get());
+            return true;
         }
+        return false;
     }
+
+    public boolean next() {
+        if (playlist.next(repeatMode != RepeatMode.ALL)) {
+            setCurrentSong(playlist.get());
+            return true;
+        }
+        playlistIndex = (playlistIndex + 1) % playlistSequence.size();
+        Playlist nextPlaylist = playlistSequence.get(playlistIndex);
+        setCurrentPlaylist(nextPlaylist);
+        setCurrentSong(playlist.get());
+        return false;
+    }
+
+
 
     public double getVolume() {
         if (mediaPlayer != null) {
@@ -226,10 +233,41 @@ public class MusicPlayer {
         this.onSongChanged = onSongChanged;
     }
 
-    // REPLACING DELEGATE WITH OBJECT PROPERTY
+    /*
+     * TODO DOCUMENTATION
+     */
     private final ObjectProperty<Song> currentSong = new SimpleObjectProperty<>();
 
     public ObjectProperty<Song> currentSongProperty() { return currentSong; }
     public void setCurrentSong(Song song) { this.currentSong.set(song); }
     public Song getCurrentSong() { return this.currentSong.get(); }
+
+    /*
+     * TODO DOCUMENTATION
+     */
+    private final ObjectProperty<Playlist> currentPlaylist = new SimpleObjectProperty<>();
+
+    public ObjectProperty<Playlist> currentPlaylistProperty() { return currentPlaylist; }
+    public Playlist getCurrentPlaylist() { return this.currentPlaylist.get(); }
+    public void setCurrentPlaylist(Playlist playlist) { this.currentPlaylist.set(playlist);
+    System.out.println(playlist.getName());
+    }
+
+
+
+    private ArrayList<Playlist> playlistSequence = new ArrayList<>();
+    private int playlistIndex = 0;
+
+    public ArrayList<Playlist> getPlaylistSequence() { return this.playlistSequence; }
+    public void setPlaylistSequence(ArrayList<Playlist> playlists) {
+        this.playlistSequence = playlists;
+        //this.playlistIndex = 0;
+
+        for(int i = 0; i < playlists.size(); i++) {
+            if (playlists.get(i).getId() == getCurrentPlaylist().getId()) {
+                this.playlistIndex = i;
+                break;
+            }
+        }
+    }
 }

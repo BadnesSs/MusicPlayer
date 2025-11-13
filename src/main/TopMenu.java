@@ -114,7 +114,7 @@ public class TopMenu extends HBox {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Audio File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.aac", "*.pcm"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.aiff"));
         File file = fileChooser.showOpenDialog(fileMenu.getScene().getWindow());
 
         Extractor extractor = new Extractor(file);

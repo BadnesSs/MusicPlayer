@@ -30,57 +30,103 @@ public class CircularDoublyLinkedList<T> {
         list.remove(node);
     }
 
-    public void next() {
-        if (list.isEmpty()) return;
 
-        if (iterator == null || !iterator.hasNext()) {
-            System.out.println("if");
+
+    /*
+     * Circular default (wraps around)
+     * Currently unknow if it will be needed
+     * but for now it is to keep the old behavior
+     */
+    public boolean next() {
+        return next(true);
+    }
+
+    public boolean previous() {
+        return previous(true);
+    }
+
+
+
+    /*
+     * ig I need to specify @param and @return for each method?
+     * Move to the next/previous element
+     * @param bRepeat - if true, wraps around to start when reaching the end; if false, stops and returns false
+     * @return true if moved to next/previous element, false if at the end and bRepeat is false
+     */
+    public boolean next(boolean bRepeat) {
+        if (list.isEmpty()) return false;
+
+        if (iterator == null) {
             iterator = list.listIterator();
-            if (iterator.hasNext()) {
-                current = iterator.next();
-            }
         }
-        else {
-            current = iterator.next();
-            if (bPrevious) {
+
+        if (!iterator.hasNext()) {
+            if (bRepeat) {
+                iterator = list.listIterator();
                 if (iterator.hasNext()) {
                     current = iterator.next();
-                } else {
-                    iterator = list.listIterator();
+
+                } else return false;
+
+            } else return false;
+
+        } else if (iterator.hasNext()) {
+            current = iterator.next();
+            if (bPrevious) {
+
+                if (iterator.hasNext()) {
                     current = iterator.next();
-                }
+
+                } else if (bRepeat) {
+                    iterator = list.listIterator();
+                    if (iterator.hasNext()) current = iterator.next();
+                    else return false;
+
+                } else return false;
             }
         }
 
         bNext = true;
         bPrevious = false;
+        return true;
     }
 
-    public void previous() {
+    public boolean previous(boolean bRepeat) {
+        if (list.isEmpty()) { return false; }
 
-        if (list.isEmpty()) { return; }
-
-        if (iterator == null || !iterator.hasPrevious()) {
+        if (iterator == null) {
             iterator = list.listIterator(list.size());
-            if (iterator.hasPrevious()) {
-                current = iterator.previous();
-            }
         }
 
-        else if (iterator.hasPrevious()) {
-            current = iterator.previous();
-            if (bNext) {
+        if (!iterator.hasPrevious()) {
+            if (bRepeat) {
+                iterator = list.listIterator(list.size());
                 if (iterator.hasPrevious()) {
                     current = iterator.previous();
-                } else {
-                    iterator = list.listIterator(list.size());
+
+                } else return false;
+
+            } else return false;
+
+        } else if (iterator.hasPrevious()) {
+            current = iterator.previous();
+            if (bNext) {
+
+                if (iterator.hasPrevious()) {
                     current = iterator.previous();
-                }
+
+                } else if (bRepeat) {
+                    iterator = list.listIterator(list.size());
+                    if (iterator.hasPrevious()) current = iterator.previous();
+                    else return false;
+
+                } else return false;
             }
         }
 
         bNext = false;
         bPrevious = true;
+        return true;
     }
 
     public T get() {
@@ -124,7 +170,6 @@ public class CircularDoublyLinkedList<T> {
             T element = iterator.next();
             if (element == node) {
                 current = element;
-                System.out.println("Moved to node: " + node.toString());
                 return true;
             }
         }
@@ -144,7 +189,6 @@ public class CircularDoublyLinkedList<T> {
         list.addAll(arrayList);
 
         if (current == null || !moveTo(current)) {
-            System.out.println("build");
             if (list.isEmpty()) {
                 iterator = null;
                 current = null;

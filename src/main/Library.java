@@ -53,6 +53,7 @@ public class Library {
         tableView.setItems(songList);
 
         musicPlayer.currentSongProperty().addListener((obs, oldSong, newSong) -> tableView.refresh());
+        musicPlayer.currentPlaylistProperty().addListener((obs, oldPlaylist, newPlaylist) -> onPlaylistChanged(newPlaylist));
     }
 
 
@@ -70,8 +71,24 @@ public class Library {
 
 
     public void onPlaylistChanged(Playlist playlist) {
+
+        // Change the playlist title
         title.setText(playlist.getName());
+
+        // Get songs from database
+        ArrayList<Song> songs;
+        if (playlist.getId() != 0) {
+            songs = database.getSongsInPlaylist(playlist);
+        } else {
+            songs = database.getSongs();
+        }
+
+        musicPlayer.playlist.rebuildFrom(songs);
         songList.setAll(musicPlayer.playlist.toList());
+
+        musicPlayer.setCurrentPlaylist(playlist);
+        // Find whatever updates it
+        // tableView.refresh();
     };
 
 

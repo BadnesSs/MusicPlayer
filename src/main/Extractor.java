@@ -27,9 +27,10 @@ public class Extractor {
 
         String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
         String artist = audioFile.getTag().getFirst(FieldKey.ARTIST);
+        artist = artist.replace("\0", ""); // Remove null characters (.wav is bad format ig)
         int duration = header.getTrackLength();
         String format = header.getFormat().toLowerCase();
-        String filepath = file.getAbsolutePath().toString();
+        String filepath = file.getAbsolutePath();
 
         if (artist == null || artist.isEmpty()) {
             artist = "Unknown Artist";

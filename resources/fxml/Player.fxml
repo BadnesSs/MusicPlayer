@@ -51,11 +51,11 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
                </graphic></Button>
-            <ToggleButton fx:id="repeatButton" mnemonicParsing="false" styleClass="repeat" stylesheets="@../css/buttons.css">
+            <Button fx:id="repeatButton" mnemonicParsing="false" styleClass="repeat" stylesheets="@../css/buttons.css">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
                </graphic>
-            </ToggleButton>
+            </Button>
             <Button fx:id="randomButton" mnemonicParsing="false" styleClass="random" stylesheets="@../css/buttons.css">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
@@ -92,7 +92,6 @@
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </ToggleButton>
-      <Button mnemonicParsing="false" text="Button" />
       <StackPane fx:id="sliderContainer" prefHeight="150.0" prefWidth="40.0" styleClass="container" stylesheets="@../css/idk.css">
          <children>
             <Slider fx:id="volumeSlider" blockIncrement="1.0" maxHeight="-Infinity" maxWidth="-Infinity" orientation="VERTICAL" prefHeight="100.0" prefWidth="15.0" styleClass="volume-slider" stylesheets="@../css/idk.css" value="10.0" />

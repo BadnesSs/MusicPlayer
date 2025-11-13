@@ -21,8 +21,6 @@ import java.util.Locale;
 
 
 
-// 2025-11-02 22:22, only god know how this code works, but it does work
-// need to refactor 50% of everything
 public class Player extends HBox {
 
     MusicPlayer musicPlayer;
@@ -30,7 +28,10 @@ public class Player extends HBox {
     private double lastVolumeValue = 0;
     private boolean userIsSeeking = false;
 
-    // FXML
+    private RepeatMode repeatMode = RepeatMode.OFF;
+
+
+
     @FXML private Label title;
 
     @FXML private ToggleButton playpauseButton;
@@ -39,7 +40,7 @@ public class Player extends HBox {
     @FXML private Button nextButton;
 
     @FXML private Button shuffleButton;
-    @FXML private ToggleButton repeatButton;
+    @FXML private Button repeatButton;
     @FXML private Button randomButton;
 
     @FXML private Label currentTime;
@@ -194,7 +195,27 @@ public class Player extends HBox {
     }
 
     private void repeat() {
-        musicPlayer.setRepeating(!musicPlayer.getRepeating());
+        repeatMode = repeatMode.next();
+
+        switch (repeatMode) {
+            case OFF:
+                repeatButton.getStyleClass().removeAll("repeat-all", "repeat-one");
+                break;
+            case ALL:
+                if (!repeatButton.getStyleClass().contains("repeat-all")) {
+                    repeatButton.getStyleClass().add("repeat-all");
+                }
+                break;
+            case ONE:
+                if (!repeatButton.getStyleClass().contains("repeat-one")) {
+                    repeatButton.getStyleClass().add("repeat-one");
+                }
+                break;
+        }
+
+        if (musicPlayer != null) {
+            musicPlayer.setRepeatMode(repeatMode);
+        }
     }
 
     private void random() {
