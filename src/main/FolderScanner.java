@@ -6,9 +6,14 @@ import java.util.Queue;
 
 public class FolderScanner {
 
-    Queue<File> folderQueue = new ArrayDeque<>();
+    /**
+     *  Scans a folder for audio files and returns them.
+     *  @param folder directory to scan for supported audio formats.
+     *  @return Queue of File objects, matching supported audio formats.
+     */
+    public static Queue<File> scanFolder(File folder) {
+        Queue<File> queue = new ArrayDeque<File>();
 
-    public FolderScanner(File folder) {
         File[] files = folder.listFiles();
         if (files != null) {
             for (File file : files) {
@@ -17,14 +22,14 @@ public class FolderScanner {
                     file.getName().toLowerCase().endsWith(".wav") ||
                     file.getName().toLowerCase().endsWith(".aiff"))
                 ) {
-                    folderQueue.add(file);
-                    System.out.println(file.getName());
+                    queue.add(file);
                 }
             }
+            return queue;
+        } else {
+            return null;
         }
-    }
 
-    public Queue<File> getFolderQueue() {
-        return folderQueue;
+
     }
 }

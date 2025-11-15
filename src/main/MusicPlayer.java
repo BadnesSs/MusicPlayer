@@ -5,10 +5,7 @@ import containers.Song;
 import data_structures_algorithms.CircularDoublyLinkedList;
 
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -154,10 +151,6 @@ public class MusicPlayer {
 
         mediaPlayer.volumeProperty().bind(volume.divide(100.));
         mediaPlayer.play();
-
-        if (onSongChanged != null) {
-            onSongChanged.songChanged();
-        }
     }
 
 
@@ -303,7 +296,9 @@ public class MusicPlayer {
 
     public ReadOnlyObjectProperty<Duration> currentTimeProperty() {
         if (mediaPlayer != null) { return mediaPlayer.currentTimeProperty(); }
-        return null;
+
+        ReadOnlyObjectWrapper<Duration> emptyDuration = new ReadOnlyObjectWrapper<>(Duration.ZERO);
+        return emptyDuration.getReadOnlyProperty();
     }
 
     public void seek(Duration duration) {
@@ -312,7 +307,7 @@ public class MusicPlayer {
 
 
 
-    //
+    // TODO DOCUMENTATION
     private void runOnFX(Runnable runnable) {
         if (Platform.isFxApplicationThread()) runnable.run();
         else Platform.runLater(runnable);
@@ -320,19 +315,10 @@ public class MusicPlayer {
 
 
 
-    // REPLACE DELEGATE USAGES WITH OBJECT PROPERTY
-    private OnSongChanged onSongChanged;
-
-    public interface OnSongChanged {
-        void songChanged();
-    }
-
-    public void songChanged(OnSongChanged onSongChanged) {
-        this.onSongChanged = onSongChanged;
-    }
-
     /*
-     * TODO DOCUMENTATION
+     * Object property that stores current song,
+     * used for synchronization with UI.
+     * Paired with functions to manipulate it.
      */
     private final ObjectProperty<Song> currentSong = new SimpleObjectProperty<>();
 
@@ -340,8 +326,12 @@ public class MusicPlayer {
     public void setCurrentSong(Song song) { this.currentSong.set(song); }
     public Song getCurrentSong() { return this.currentSong.get(); }
 
+
+
     /*
-     * TODO DOCUMENTATION
+     * Object property that stores current playlist,
+     * used for synchronization with UI.
+     * Paired with functions to manipulate it.
      */
     private final ObjectProperty<Playlist> currentPlaylist = new SimpleObjectProperty<>();
 
@@ -351,6 +341,7 @@ public class MusicPlayer {
 
 
 
+    // TODO DOCUMENTATION
     private ArrayList<Playlist> playlistSequence = new ArrayList<>();
     private int playlistIndex = 0;
 

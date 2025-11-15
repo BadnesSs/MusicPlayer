@@ -5,7 +5,9 @@ import containers.Playlist;
 import javafx.fxml.FXML;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
@@ -14,6 +16,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
+import javafx.stage.Window;
+import popups.CreatePlaylistMenu;
+
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -30,6 +35,7 @@ public class LibraryMenu extends VBox {
     private ObservableList<Playlist> playlistList;
 
     @FXML private Button shufflePlaylistButton;
+    @FXML private Button createPlaylistButton;
     @FXML private ListView<Playlist> listView;
 
     public LibraryMenu() {
@@ -57,6 +63,7 @@ public class LibraryMenu extends VBox {
         setupDeletionHandler();
 
         shufflePlaylistButton.setOnAction(evt -> shuffle());
+        createPlaylistButton.setOnAction(evt -> createPlaylist());
 
         //
         musicPlayer.setPlaylistSequence(new ArrayList<>(playlistList));
@@ -67,6 +74,21 @@ public class LibraryMenu extends VBox {
 
     public void addPlaylist(Playlist playlist) {
         playlistList.add(playlist);
+    }
+
+    public void createPlaylist() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PlaylistPopup.fxml"));
+            Parent parent = loader.load();
+
+            Window window = listView.getScene().getWindow();
+
+            CreatePlaylistMenu createPlaylistMenu = loader.getController();
+            createPlaylistMenu.initializeCreatePlaylistMenu(window, parent, database, musicPlayer, this);
+
+        }   catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //

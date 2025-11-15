@@ -27,6 +27,7 @@ public class Library {
 
     public Library() {}
 
+
     public void initializeLibrary(Database database, MusicPlayer musicPlayer, Player player) {
         this.database = database;
         this.musicPlayer = musicPlayer;

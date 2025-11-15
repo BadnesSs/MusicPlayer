@@ -12,6 +12,13 @@ public class Database {
 
     private final Connection connection;
 
+    /**
+     *  Constructor for the Database class.
+     *  Uses PostgreSQL JDBC to connect to the database.
+     *  @param url      the database URL
+     *  @param user     the database username
+     *  @param password the database password
+     */
     public Database(String url, String user, String password) throws SQLException {
         try {
             Class.forName("org.postgresql.Driver");
@@ -22,6 +29,13 @@ public class Database {
         connection = DriverManager.getConnection(url, user, password);
     }
 
+
+
+    /**
+     *  Function adding a song to the database.
+     *  Also retrieves the generated ID and sets it to the Song object.
+     *  @param song Song class object
+     */
     public void addSong(Song song) {
         String sql = "INSERT INTO songs(title, artist, duration, format, filepath) VALUES (?, ?, ?, ?, ?)";
 
@@ -35,7 +49,6 @@ public class Database {
 
             try (ResultSet resultSet = statement.getGeneratedKeys()) {
                 if (resultSet.next()) {
-                    System.out.println("nigga");
                     int id = resultSet.getInt(1);
                     song.setId(id);
                 }
@@ -45,6 +58,10 @@ public class Database {
         }
     }
 
+    /**
+     *  Function deleting a song from the database.
+     *  @param song Song class object
+     */
     public void deleteSong(Song song) {
         String sql = "DELETE FROM songs WHERE id = ?";
 
@@ -56,6 +73,12 @@ public class Database {
         }
     }
 
+    /**
+     *  Function retrieving all songs from the database.
+     *  If the specified file path does not exist,
+     *  the song is deleted from the database.
+     *  @return ArrayList of Song objects
+     */
     public ArrayList<Song> getSongs() {
 
         ArrayList<Song> songs = new ArrayList<>();
@@ -75,8 +98,6 @@ public class Database {
                 String filepath = resultSet.getString("filepath");
 
                 if (!Files.exists(Paths.get(filepath))) {
-                    System.out.println("error");
-
                     try (PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM songs WHERE id = ?")) {
                         deleteStatement.setInt(1, id);
                         deleteStatement.executeUpdate();
@@ -99,6 +120,11 @@ public class Database {
 
 
 
+    /**
+     *  Function adding a playlist to the database.
+     *  Also retrieves the generated ID and sets it to the Playlist object.
+     *  @param playlist Playlist class object
+     */
     public void addPlaylist(Playlist playlist) {
         String sql = "INSERT INTO playlists(name, filepath) VALUES (?, ?)";
 
@@ -111,7 +137,6 @@ public class Database {
                 if (resultSet.next()) {
                     int id = resultSet.getInt(1);
                     playlist.setId(id);
-                    System.out.println("Created CreatePlaylistMenu with ID: " + id);
                 }
             }
         } catch (SQLException e) {
@@ -119,6 +144,10 @@ public class Database {
         }
     }
 
+    /**
+     *  Function deleting a playlist from the database.
+     *  @param playlist Playlist class object
+     */
     public void deletePlaylist(Playlist playlist) {
         String sql = "DELETE FROM playlists WHERE id = ?";
 
@@ -130,6 +159,10 @@ public class Database {
         }
     }
 
+    /**
+     *  Function retrieving all playlists from the database.
+     *  @return ArrayList of Playlist objects
+     */
     public ArrayList<Playlist> getPlaylists() {
 
         ArrayList<Playlist> playlists = new ArrayList<>();
@@ -158,6 +191,11 @@ public class Database {
 
 
 
+    /**
+     *  Function inserting a song into a playlist.
+     *  @param songId ID of the song to insert
+     *  @param playlistId ID of the playlist to insert into
+     */
     public void insertSongIntoPlaylist(int songId, int playlistId) {
         String sql = "INSERT INTO playlist_songs(playlist_id, song_id) VALUES (?, ?)";
 
@@ -170,6 +208,11 @@ public class Database {
         }
     }
 
+    /**
+     *  Function retrieving all songs in a playlist.
+     *  @param playlist Playlist class object
+     *  @return ArrayList of Song objects.
+     */
     public ArrayList<Song> getSongsInPlaylist(Playlist playlist) {
         ArrayList<Song> songs = new ArrayList<>();
 
@@ -205,8 +248,11 @@ public class Database {
         return songs;
     }
 
-
-
+    /**
+     *  Function retrieving the size of a playlist.
+     *  @param playlist Playlist class object
+     *  @return size of the playlist as an integer
+     */
     public int getPlaylistSize(Playlist playlist) {
         String sql = "SELECT COUNT(*) FROM playlist_songs WHERE playlist_id = ?";
 

@@ -117,3 +117,13 @@
 .toggle-button.volume:selected:hover .image-view {
     -fx-image: url("../Icons/MuteButtonHover.png");
 }
+
+
+
+.button.create-playlist .image-view {
+    -fx-image: url("../Icons/LibraryMenu/CreatePlaylistButton.png");
+}
+
+.button.create-playlist:hover .image-view {
+    -fx-image: url("../Icons/LibraryMenu/CreatePlaylistButtonHover.png");
+}

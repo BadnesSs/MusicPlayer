@@ -56,7 +56,7 @@ public class Player extends HBox {
 
     public void initializePlayer(MusicPlayer musicPlayer) {
         this.musicPlayer = musicPlayer;
-        musicPlayer.songChanged(this::setupProgressSlider);
+        musicPlayer.currentSongProperty().addListener((obs, oldSong, newSong) -> setupProgressSlider());
         initializeMainButtons();
         initializeSecondaryButtons();
         initializeTimeLabels();

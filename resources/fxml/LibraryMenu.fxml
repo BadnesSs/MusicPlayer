@@ -24,6 +24,9 @@
          </children>
       </HBox>
       <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-      <Button mnemonicParsing="false" />
+      <Button fx:id="createPlaylistButton" mnemonicParsing="false" styleClass="create-playlist" stylesheets="@../css/buttons.css">
+         <graphic>
+            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic></Button>
    </children>
 </VBox>

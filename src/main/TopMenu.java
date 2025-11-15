@@ -69,7 +69,7 @@ public class TopMenu extends HBox {
         addSong.setOnAction(evt -> addSong());
         addFolder.setOnAction(evt -> addFolder());
 
-        createPlaylist.setOnAction(evt -> createPlaylist());
+        createPlaylist.setOnAction(evt -> libraryMenu.createPlaylist());
 
         quit.setOnAction(evt -> Platform.exit());
 
@@ -117,8 +117,7 @@ public class TopMenu extends HBox {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav", "*.aiff"));
         File file = fileChooser.showOpenDialog(fileMenu.getScene().getWindow());
 
-        Extractor extractor = new Extractor(file);
-        Song song = extractor.get();
+        Song song = Extractor.extract(file);
 
         database.addSong(song);
         musicPlayer.addSong(song);
@@ -129,32 +128,21 @@ public class TopMenu extends HBox {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Folder");
         File file = directoryChooser.showDialog(fileMenu.getScene().getWindow());
-        FolderScanner folderScanner = new FolderScanner(file);
-        Queue<File> folderQueue = folderScanner.getFolderQueue();
-        while (!folderQueue.isEmpty()) {
-            File songFile = folderQueue.poll();
 
-            Extractor extractor = new Extractor(songFile);
-            Song song = extractor.get();
+        Queue<File> queue = FolderScanner.scanFolder(file);
+
+        if (queue == null) {
+            return;
+        }
+
+        while (!queue.isEmpty()) {
+            File songFile = queue.poll();
+
+            Song song = Extractor.extract(songFile);
 
             database.addSong(song);
             musicPlayer.addSong(song);
             library.addSong(song);
-        }
-    }
-
-    public void createPlaylist() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PlaylistPopup.fxml"));
-            Parent parent = loader.load();
-
-            Window window = fileMenu.getScene().getWindow();
-
-            CreatePlaylistMenu createPlaylistMenu = loader.getController();
-            createPlaylistMenu.initializeCreatePlaylistMenu(window, parent, database, musicPlayer, libraryMenu);
-
-        }   catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
