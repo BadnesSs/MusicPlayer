@@ -144,6 +144,26 @@ public class CircularDoublyLinkedList<T> {
         return current;
     }
 
+    public T getFirst() {
+        iterator = list.listIterator();
+        if (iterator.hasNext()) {
+            current = iterator.next();
+            return current;
+        }
+
+        return null;
+    }
+
+    public T getLast() {
+        iterator = list.listIterator(list.size());
+        if (iterator.hasPrevious()) {
+            current = iterator.previous();
+            return current;
+        }
+
+        return null;
+    }
+
     public int size() {
         return list.size();
     }

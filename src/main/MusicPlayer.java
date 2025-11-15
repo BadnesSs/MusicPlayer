@@ -169,52 +169,121 @@ public class MusicPlayer {
         });
     }
 
-    /*
-     * TODO DOCUMENTATION
-     */
+
+
     public boolean previous() {
+        /*
+         * If there is only one playlist
+         * loop within it, otherwise
+         *
+         * if there are multiple playlists,
+         * and RepeatMode is not set
+         * to loop all playlists,
+         * loop within current playlist
+         */
         if (playlistSequence.size() == 1) {
             playlist.previous(true);
+            setCurrentSong(playlist.get());
+            return true;
 
         } else if (playlist.previous(repeatMode != RepeatMode.ALL)) {
             setCurrentSong(playlist.get());
             return true;
         }
 
+
+
         playlistIndex = (playlistIndex - 1 + playlistSequence.size()) % playlistSequence.size();
-        Playlist previousPlaylist = playlistSequence.get(playlistIndex);
-        if (!(previousPlaylist.getId() == 0 && !database.getSongs().isEmpty()) && database.getPlaylistSize(previousPlaylist) == 0) {
-            if (playlistSequence.size() == 2) {
-                playlist.previous(true);
-            }
-            playlistIndex = (playlistIndex - 1 + playlistSequence.size()) % playlistSequence.size();
+        Playlist previousPlaylist = null;
+
+
+
+        /*
+         * Loop until we find
+         * a non-empty playlist
+         */
+        int checkedIndex = 0;
+        while (checkedIndex < playlistSequence.size()) {
             previousPlaylist = playlistSequence.get(playlistIndex);
+
+            boolean isEmpty = database.getPlaylistSize(previousPlaylist) == 0;
+            boolean isLibrary = previousPlaylist.getId() == 0;
+            boolean isDatabaseEmpty = database.getSongs().isEmpty();
+
+            if (!isEmpty || (isLibrary && !isDatabaseEmpty)) break;
+
+            playlistIndex = (playlistIndex - 1 + playlistSequence.size()) % playlistSequence.size();
+            checkedIndex++;
         }
+
+
+
+        /*
+         * Update current playlist and song
+         * object properties, in order for UI
+         * to reflect the changes
+         */
         setCurrentPlaylist(previousPlaylist);
-        setCurrentSong(playlist.get());
+        setCurrentSong(playlist.getLast());
         return false;
     }
 
+
+
     public boolean next() {
+        /*
+         * If there is only one playlist
+         * loop within it, otherwise
+         *
+         * if there are multiple playlists,
+         * and RepeatMode is not set
+         * to loop all playlists,
+         * loop within current playlist
+         */
         if (playlistSequence.size() == 1) {
             playlist.next(true);
+            setCurrentSong(playlist.get());
+            return true;
 
         } else if (playlist.next(repeatMode != RepeatMode.ALL)) {
             setCurrentSong(playlist.get());
             return true;
         }
 
+
+
         playlistIndex = (playlistIndex + 1) % playlistSequence.size();
-        Playlist nextPlaylist = playlistSequence.get(playlistIndex);
-        if (!(nextPlaylist.getId() == 0 && !database.getSongs().isEmpty()) && database.getPlaylistSize(nextPlaylist) == 0) {
-            if (playlistSequence.size() == 2) {
-                playlist.next(true);
-            }
-            playlistIndex = (playlistIndex + 1) % playlistSequence.size();
+        Playlist nextPlaylist = null;
+
+
+
+        /*
+         * Loop until we find
+         * a non-empty playlist
+         */
+        int checkedIndex = 0;
+        while (checkedIndex < playlistSequence.size()) {
             nextPlaylist = playlistSequence.get(playlistIndex);
+
+            boolean isEmpty = database.getPlaylistSize(nextPlaylist) == 0;
+            boolean isLibrary = nextPlaylist.getId() == 0;
+            boolean isDatabaseEmpty = database.getSongs().isEmpty();
+
+            if (!isEmpty || (isLibrary && !isDatabaseEmpty)) break;
+
+            playlistIndex = (playlistIndex + 1) % playlistSequence.size();
+            checkedIndex++;
         }
+
+
+
+        /*
+         * Update current playlist and song
+         * object properties, in order for UI
+         * to reflect the changes
+         */
         setCurrentPlaylist(nextPlaylist);
-        setCurrentSong(playlist.get());
+        setCurrentSong(playlist.getFirst());
         return false;
     }
 
@@ -278,9 +347,7 @@ public class MusicPlayer {
 
     public ObjectProperty<Playlist> currentPlaylistProperty() { return currentPlaylist; }
     public Playlist getCurrentPlaylist() { return this.currentPlaylist.get(); }
-    public void setCurrentPlaylist(Playlist playlist) { this.currentPlaylist.set(playlist);
-    System.out.println(playlist.getName());
-    }
+    public void setCurrentPlaylist(Playlist playlist) { this.currentPlaylist.set(playlist); }
 
 
 
