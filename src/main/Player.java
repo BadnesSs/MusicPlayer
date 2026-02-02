@@ -300,40 +300,4 @@ public class Player extends HBox {
             volumeButton.setSelected(false);
         }
     }
-
-
-
-    /*
-     * Deprecated features
-     * will be deleted later
-     * FXML elements are already removed
-     */
-
-
-
-    /*
-    @FXML private Button randomButton;
-
-    public void initializeSecondaryButtons() {
-        shuffleButton.setOnAction(evt -> shuffle());
-        repeatButton.setOnAction(evt -> repeat());
-        randomButton.setOnAction(evt -> random());
-    }
-
-    private void random() {
-        playpauseButton.setSelected(true);
-        musicPlayer.stop();
-        musicPlayer.playlist.moveRandom();
-        play();
-    }
-     */
-
-
-
-    /*
-    private void play() {
-        musicPlayer.play();
-        setupProgressSlider();
-    }
-     */
 }

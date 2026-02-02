@@ -219,6 +219,7 @@ public class MusicPlayer {
          */
         setCurrentPlaylist(previousPlaylist);
         setCurrentSong(playlist.getLast());
+        System.out.println(currentSong.get().getTitle());
         return false;
     }
 

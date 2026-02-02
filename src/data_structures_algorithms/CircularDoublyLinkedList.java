@@ -21,7 +21,7 @@ public class CircularDoublyLinkedList<T> {
     public void remove(T node) { list.remove(node); }
 
 
-
+    // TODO THIS ONE AS WELL, BUT THAT'S FOR TOMORROW
     public boolean next(boolean bRepeat) {
         if (list.isEmpty()) return false;
 
@@ -60,6 +60,7 @@ public class CircularDoublyLinkedList<T> {
         return true;
     }
 
+    // TODO THIS BAD BOY NEEDS SOME ADDITIONAL WORK
     public boolean previous(boolean bRepeat) {
         if (list.isEmpty()) { return false; }
 
@@ -234,32 +235,4 @@ public class CircularDoublyLinkedList<T> {
 
         return i+1;
     }
-
-
-    /*
-     * Deprecated features
-     * will be deleted later
-     */
-
-    /*
-     public void moveRandom() {
-        int index = (int) (Math.random() * list.size());
-        iterator = list.listIterator();
-        for (int i = 0; i < index; i++) {
-            current = iterator.next();
-        }
-    }
-
-    public boolean next() {
-        return next(true);
-    }
-
-    public boolean previous() {
-        return previous(true);
-    }
-
-    public int size() {
-        return list.size();
-    }
-     */
 }
