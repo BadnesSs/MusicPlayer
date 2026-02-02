@@ -124,8 +124,10 @@ public class LibraryMenu extends VBox {
                 if (empty || playlist == null) {
                     setGraphic(null);
                     setText(null);
+                    setStyle("-fx-background-color: white;");
                 } else {
                     nameLabel.setText(playlist.getName());
+                    setStyle("");
 
                     Image image = null;
                     try {

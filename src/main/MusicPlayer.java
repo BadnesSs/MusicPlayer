@@ -72,12 +72,13 @@ public class MusicPlayer {
     // Status related
     private final ObjectProperty<Status> actualStatus = new SimpleObjectProperty<>(Status.UNKNOWN);
 
-    private final ChangeListener<Status> statusListener = (obs, oldVlue, newValue) -> actualStatus.set(newValue);
+    private final ChangeListener<Status> statusListener = (obs, oldValue, newValue) -> actualStatus.set(newValue);
 
 
 
     private Database database;
     private MediaPlayer mediaPlayer;
+    public MediaPlayer getMediaPlayer() { return mediaPlayer; }
 
     public CircularDoublyLinkedList<Song> playlist;
 
@@ -128,6 +129,8 @@ public class MusicPlayer {
         mediaPlayer.statusProperty().addListener(statusListener);
         actualStatus.set(mediaPlayer.getStatus());
 
+        currentTime.bind(mediaPlayer.currentTimeProperty());
+
 
 
         mediaPlayer.setOnEndOfMedia(() -> {
@@ -138,8 +141,6 @@ public class MusicPlayer {
             } else if (repeatMode == RepeatMode.ALL) {
                if (next()) {
                    play();
-
-               } else {
                }
 
             } else if (repeatMode == RepeatMode.ONE) {
@@ -148,7 +149,7 @@ public class MusicPlayer {
         });
 
 
-
+        setCurrentSong(song);
         mediaPlayer.volumeProperty().bind(volume.divide(100.));
         mediaPlayer.play();
     }
@@ -294,12 +295,8 @@ public class MusicPlayer {
         return null;
     }
 
-    public ReadOnlyObjectProperty<Duration> currentTimeProperty() {
-        if (mediaPlayer != null) { return mediaPlayer.currentTimeProperty(); }
-
-        ReadOnlyObjectWrapper<Duration> emptyDuration = new ReadOnlyObjectWrapper<>(Duration.ZERO);
-        return emptyDuration.getReadOnlyProperty();
-    }
+    private final ReadOnlyObjectWrapper<Duration> currentTime = new ReadOnlyObjectWrapper<>(Duration.ZERO);
+    public ReadOnlyObjectProperty<Duration> currentTimeProperty() { return currentTime.getReadOnlyProperty(); }
 
     public void seek(Duration duration) {
         if (mediaPlayer != null) { mediaPlayer.seek(duration); }
@@ -323,7 +320,10 @@ public class MusicPlayer {
     private final ObjectProperty<Song> currentSong = new SimpleObjectProperty<>();
 
     public ObjectProperty<Song> currentSongProperty() { return currentSong; }
-    public void setCurrentSong(Song song) { this.currentSong.set(song); }
+    public void setCurrentSong(Song song) {
+        Song current = this.currentSong.get();
+        //if (current == song) this.currentSong.set(null);
+        this.currentSong.set(song); }
     public Song getCurrentSong() { return this.currentSong.get(); }
 
 

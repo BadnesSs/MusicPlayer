@@ -7,7 +7,7 @@ import java.util.ListIterator;
 
 public class CircularDoublyLinkedList<T> {
 
-    private LinkedList<T> list = new LinkedList<>();
+    private final LinkedList<T> list = new LinkedList<>();
 
 
 
@@ -16,43 +16,12 @@ public class CircularDoublyLinkedList<T> {
     private boolean bPrevious = false;
     private T current = null;
 
-    public void add(T node) {
-        list.add(node);
-        // Reset iterator, cuz it wont work when you add mid work
-        // Do i still need it? I have moveTo now that I use to fix current position
-        //iterator = list.listIterator();
-        //if (iterator.hasNext()) {
-        //    current = iterator.next();
-        //}
-    }
+    public void add(T node) { list.add(node); }
 
-    public void remove(T node) {
-        list.remove(node);
-    }
+    public void remove(T node) { list.remove(node); }
 
 
 
-    /*
-     * Circular default (wraps around)
-     * Currently unknow if it will be needed
-     * but for now it is to keep the old behavior
-     */
-    public boolean next() {
-        return next(true);
-    }
-
-    public boolean previous() {
-        return previous(true);
-    }
-
-
-
-    /*
-     * ig I need to specify @param and @return for each method?
-     * Move to the next/previous element
-     * @param bRepeat - if true, wraps around to start when reaching the end; if false, stops and returns false
-     * @return true if moved to next/previous element, false if at the end and bRepeat is false
-     */
     public boolean next(boolean bRepeat) {
         if (list.isEmpty()) return false;
 
@@ -164,13 +133,8 @@ public class CircularDoublyLinkedList<T> {
         return null;
     }
 
-    public int size() {
-        return list.size();
-    }
 
 
-
-    // Mano sudas, o ne pagrindinis kodas
     public ArrayList<T> toList() {
         ArrayList<T> arraylist = new ArrayList<>();
 
@@ -196,13 +160,7 @@ public class CircularDoublyLinkedList<T> {
         return false;
     }
 
-    public void moveRandom() {
-        int index = (int) (Math.random() * list.size());
-        iterator = list.listIterator();
-        for (int i = 0; i < index; i++) {
-            current = iterator.next();
-        }
-    }
+
 
     public void rebuildFrom(ArrayList<T> arrayList) {
         list.clear();
@@ -276,4 +234,32 @@ public class CircularDoublyLinkedList<T> {
 
         return i+1;
     }
+
+
+    /*
+     * Deprecated features
+     * will be deleted later
+     */
+
+    /*
+     public void moveRandom() {
+        int index = (int) (Math.random() * list.size());
+        iterator = list.listIterator();
+        for (int i = 0; i < index; i++) {
+            current = iterator.next();
+        }
+    }
+
+    public boolean next() {
+        return next(true);
+    }
+
+    public boolean previous() {
+        return previous(true);
+    }
+
+    public int size() {
+        return list.size();
+    }
+     */
 }

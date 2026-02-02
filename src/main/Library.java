@@ -7,17 +7,22 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Library {
 
-    @FXML private VBox root;
+    // Never accessed, delete later if not needed
+    // @FXML private VBox root;
     @FXML private Label title;
-    @FXML private TableView tableView;
+    @FXML private ImageView coverImage;
+    @FXML private TableView<Song> tableView;
 
     Database database;
     MusicPlayer musicPlayer;
@@ -75,6 +80,15 @@ public class Library {
 
         // Change the playlist title
         title.setText(playlist.getName());
+
+        Image image;
+        if (playlist.getFilePath() != null) {
+            image = new Image(new File(playlist.getFilePath()).toURI().toString());
+        } else {
+            image = new Image(getClass().getResourceAsStream("/PlaylistCover.png"));
+        }
+
+        coverImage.imageProperty().set(image);
 
         // Get songs from database
         ArrayList<Song> songs;
@@ -160,7 +174,6 @@ public class Library {
                         musicPlayer.playlist.moveTo(rowData);
                         player.setPlaypauseSelected(true);
                         musicPlayer.play();
-                        System.out.println("Double click on: " + rowData.getTitle());
                     }
                 });
             }
