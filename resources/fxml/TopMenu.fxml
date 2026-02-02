@@ -18,13 +18,6 @@
             <MenuItem fx:id="quit" mnemonicParsing="false" text="Quit" />
         </items>
       </MenuButton>
-      <MenuButton maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" text="Destytojui">
-        <items>
-          <MenuItem fx:id="sortByIdButton" mnemonicParsing="false" text="QuickSort by Id" />
-          <MenuItem fx:id="sortByArtistButton" mnemonicParsing="false" text="QuickSort by Artist" />
-            <MenuItem fx:id="getHistoryButton" mnemonicParsing="false" text="Get History" />
-        </items>
-      </MenuButton>
    </children>
    <stylesheets>
       <URL value="@../css/default.css" />

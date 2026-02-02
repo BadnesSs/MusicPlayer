@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -28,6 +29,8 @@ public class CreatePlaylistMenu {
     private final SimpleStringProperty name = new SimpleStringProperty();
 
     @FXML private TextField textField;
+    @FXML private Button cancelButton;
+    @FXML private Button confirmButton;
     @FXML private Button chooseCoverButton;
     @FXML private ImageView coverImage;
 
@@ -45,17 +48,23 @@ public class CreatePlaylistMenu {
          * TODO DOCUMENTATION
          */
         textField.textProperty().bindBidirectional(name);
-        textField.setOnKeyPressed(evt -> {
-            switch (evt.getCode()) {
-                case ENTER -> {
-                    createPlaylist();
-                    Stage stage = (Stage) textField.getScene().getWindow();
-                    stage.close();
-                }
-                case ESCAPE -> {
-                    Stage stage = (Stage) textField.getScene().getWindow();
-                    stage.close();
-                }
+
+
+
+        /*
+         * Buttons to CANCEL & CONFIRM creation of playlist.
+         * Both buttons are set as CANCEL/DEFAULT button,
+         * so they consume the VK_ESC/VK_ENTER events.
+         */
+        cancelButton.setOnAction(evt -> {
+           Stage stage = (Stage) cancelButton.getScene().getWindow();
+           stage.close();
+        });
+
+        confirmButton.setOnAction(evt -> {
+            if (createPlaylist()) {
+                Stage stage = (Stage) confirmButton.getScene().getWindow();
+                stage.close();
             }
         });
 
@@ -92,8 +101,14 @@ public class CreatePlaylistMenu {
 
 
 
-    private void createPlaylist() {
+    private boolean createPlaylist() {
         Playlist playlist;
+        // TODO CHECK
+        if (name.get() == null || name.isEmpty().get()) {
+            textField.setStyle("-fx-border-color: red;");
+            textField.setOnKeyPressed(e -> textField.setStyle(""));
+            return false;
+        }
         if (file != null) {
             playlist = new Playlist(0, name.get(), file.getAbsolutePath());
 
@@ -104,6 +119,6 @@ public class CreatePlaylistMenu {
         database.addPlaylist(playlist);
         libraryMenu.addPlaylist(playlist);
         musicPlayer.getPlaylistSequence().add(playlist);
-
+        return true;
     }
 }

@@ -27,6 +27,8 @@
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
+      <Button fx:id="confirmButton" defaultButton="true" layoutX="260.0" layoutY="129.0" mnemonicParsing="false" text="Confirm" />
+      <Button fx:id="cancelButton" cancelButton="true" layoutX="200.0" layoutY="129.0" mnemonicParsing="false" text="Cancel" />
    </children>
    <stylesheets>
       <URL value="@../css/rename.css" />

@@ -41,18 +41,6 @@ public class TopMenu extends HBox {
 
 
 
-    //
-    //
-    // DSA
-    @FXML private MenuItem sortByIdButton;
-    @FXML private MenuItem sortByArtistButton;
-    @FXML private MenuItem getHistoryButton;
-    //
-    //
-    //
-
-
-
     public TopMenu() {}
 
     public void initializeMenu(Database database, MusicPlayer musicPlayer, Library library, LibraryMenu libraryMenu) {
@@ -72,16 +60,6 @@ public class TopMenu extends HBox {
         createPlaylist.setOnAction(evt -> libraryMenu.createPlaylist());
 
         quit.setOnAction(evt -> Platform.exit());
-
-        //
-        //
-        //
-        sortByIdButton.setOnAction(evt -> musicPlayer.playlist.quickSort(Song.BY_ID));
-        sortByArtistButton.setOnAction(evt -> musicPlayer.playlist.quickSort(Song.BY_ARTIST));
-        getHistoryButton.setOnAction(evt -> displayStack());
-        //
-        //
-        //
     }
 
     //
