@@ -18,12 +18,14 @@ import main.MusicPlayer;
 
 import java.io.File;
 
-
-public class CreatePlaylistMenu {
+public class EditPlaylistMenu {
 
     private Database database;
     private MusicPlayer musicPlayer;
     private LibraryMenu libraryMenu;
+    private Playlist oldPlaylist;
+    private Playlist playlist;
+
 
     private final SimpleStringProperty name = new SimpleStringProperty();
 
@@ -35,18 +37,32 @@ public class CreatePlaylistMenu {
 
     private File file;
 
-    public CreatePlaylistMenu() {}
+    public EditPlaylistMenu() {}
 
-    public void initializeCreatePlaylistMenu(Window window, Parent parent, Database database, MusicPlayer musicPlayer, LibraryMenu libraryMenu) {
+    //! SAVE PHOTO
+    public void initializeEditPlaylistMenu(Window window, Parent parent, Database database, MusicPlayer musicPlayer, LibraryMenu libraryMenu, Playlist playlist) {
         this.database = database;
         this.musicPlayer = musicPlayer;
 
         this.libraryMenu = libraryMenu;
+        this.playlist = playlist;
+        this.oldPlaylist = playlist;
 
         /*
          * TODO DOCUMENTATION
          */
         textField.textProperty().bindBidirectional(name);
+        name.setValue(playlist.getName());
+
+        if (playlist.getFilePath() != null) {
+            file = new File(playlist.getFilePath());
+            if (file.exists()) {
+                Image image = new Image(file.toURI().toString());
+                coverImage.setImage(image);
+            }
+        }
+
+
 
 
 
@@ -56,12 +72,12 @@ public class CreatePlaylistMenu {
          * so they consume the VK_ESC/VK_ENTER events.
          */
         cancelButton.setOnAction(evt -> {
-           Stage stage = (Stage) cancelButton.getScene().getWindow();
-           stage.close();
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            stage.close();
         });
 
         confirmButton.setOnAction(evt -> {
-            if (createPlaylist()) {
+            if (editPlaylist()) {
                 Stage stage = (Stage) confirmButton.getScene().getWindow();
                 stage.close();
             }
@@ -75,7 +91,7 @@ public class CreatePlaylistMenu {
 
         // ADD MORE FORMAAAAAAAAAAAAATS FOR IMAGEEEEEEEEEEEEEES YOOOOO
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Cover Image");
+        fileChooser.setTitle("Change Cover Image");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg"));
         chooseCoverButton.setOnAction(evt -> {
             file = fileChooser.showOpenDialog(chooseCoverButton.getScene().getWindow());
@@ -94,30 +110,32 @@ public class CreatePlaylistMenu {
 
         Scene scene = new Scene(parent);
         stage.setScene(scene);
-        stage.setTitle("Create New Playlist");
+        stage.setTitle("Edit Playlist");
         stage.showAndWait();
     }
 
 
 
-    private boolean createPlaylist() {
-        Playlist playlist;
-        // TODO CHECK
+    //TODO check file
+    private boolean editPlaylist() {
         if (name.get() == null || name.isEmpty().get()) {
             textField.setStyle("-fx-border-color: red;");
             textField.setOnKeyPressed(e -> textField.setStyle(""));
             return false;
         }
         if (file != null) {
-            playlist = new Playlist(0, name.get(), file.getAbsolutePath());
+            playlist.setName(name.get());
+            playlist.setFilePath(file.getAbsolutePath());
 
         } else {
-            playlist = new Playlist(0, name.get());
+            playlist.setName(name.get());
+            playlist.setFilePath(null);
         }
 
-        database.addPlaylist(playlist);
-        libraryMenu.addPlaylist(playlist);
-        musicPlayer.getPlaylistSequence().add(playlist);
+        database.editPlaylist(playlist);
+        libraryMenu.editPlaylist(oldPlaylist, playlist);
+        int i = musicPlayer.getPlaylistSequence().indexOf(oldPlaylist);
+        musicPlayer.getPlaylistSequence().set(i, playlist);
         return true;
     }
 }

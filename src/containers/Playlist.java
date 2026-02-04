@@ -18,8 +18,10 @@ public class Playlist {
     public int getId() { return id; }
 
     private String name;
+    public void setName(String name) { this.name = name; }
     public String getName() { return name; }
 
     private String filePath;
+    public void setFilePath(String filePath) { this.filePath = filePath; }
     public String getFilePath() { return filePath; }
 }

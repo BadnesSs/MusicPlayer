@@ -144,6 +144,31 @@ public class Database {
         }
     }
 
+
+    /**
+     *
+     * @param playlist
+     */
+    public void editPlaylist(Playlist playlist) {
+        String sql = "INSERT INTO playlists(name, filepath) VALUES (?, ?)";
+        sql = "UPDATE playlists " +
+                "SET name = ?, filepath = ? " +
+                "WHERE id = ?;";
+
+        // Dont need to return key here
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, playlist.getName());
+            statement.setString(2, playlist.getFilePath());
+            statement.setInt(3, playlist.getId());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     /**
      *  Function deleting a playlist from the database.
      *  @param playlist Playlist class object

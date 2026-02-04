@@ -118,6 +118,8 @@ public class CircularDoublyLinkedList<T> {
         iterator = list.listIterator();
         if (iterator.hasNext()) {
             current = iterator.next();
+            bNext = true; bPrevious = false;
+            System.out.println("Dropped flags");
             return current;
         }
 
@@ -128,6 +130,8 @@ public class CircularDoublyLinkedList<T> {
         iterator = list.listIterator(list.size());
         if (iterator.hasPrevious()) {
             current = iterator.previous();
+            bNext = false; bPrevious = true;
+            System.out.println("Dropped flags");
             return current;
         }
 

@@ -2,25 +2,23 @@ package main;
 
 import containers.Playlist;
 
+import popups.CreatePlaylistMenu;
+import popups.EditPlaylistMenu;
+
 import javafx.fxml.FXML;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Label;
 import javafx.stage.Window;
-import popups.CreatePlaylistMenu;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -76,6 +74,12 @@ public class LibraryMenu extends VBox {
         playlistList.add(playlist);
     }
 
+    // todo test
+    public void editPlaylist(Playlist oldPlaylist, Playlist playlist) {
+        int i = playlistList.indexOf(oldPlaylist);
+        playlistList.set(i, playlist);
+    }
+
     public void createPlaylist() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PlaylistPopup.fxml"));
@@ -87,6 +91,21 @@ public class LibraryMenu extends VBox {
             createPlaylistMenu.initializeCreatePlaylistMenu(window, parent, database, musicPlayer, this);
 
         }   catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void temp(Playlist playlist) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editPlaylistPopup.fxml"));
+            Parent parent = loader.load();
+
+            Window window = listView.getScene().getWindow();
+
+           EditPlaylistMenu editPlaylistMenu = loader.getController();
+           editPlaylistMenu.initializeEditPlaylistMenu(window, parent, database, musicPlayer, this, playlist);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -117,6 +136,30 @@ public class LibraryMenu extends VBox {
                     }
                 });
             }
+
+
+
+            // Right click
+            {
+                ContextMenu contextMenu = new ContextMenu();
+                SeparatorMenuItem separator = new SeparatorMenuItem();
+
+                MenuItem editPlaylistButton = new MenuItem("Edit Playlist");
+                editPlaylistButton.setOnAction(e -> temp(getItem()));
+                getItem();
+                //editPlaylistButton
+
+                //?
+                MenuItem temp = new MenuItem("Edit TBD");
+
+                contextMenu.getItems().addAll(editPlaylistButton, temp);
+
+                emptyProperty().addListener((obs, wasEmpty, isEmpty) -> {
+                    setContextMenu(isEmpty ? null : contextMenu);
+                });
+            }
+
+
 
             @Override
             protected void updateItem(Playlist playlist, boolean empty) {
