@@ -1,35 +1,33 @@
 package popups;
 
-import containers.Playlist;
+import main.Database;
+import main.Library;
+import main.MusicPlayer;
+
+import containers.Song;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.*;
 
-import main.Database;
-import main.LibraryMenu;
-import main.MusicPlayer;
-
 import java.io.File;
 
-public class EditPlaylistMenu {
-
+public class EditSongMenu {
     private Database database;
     private MusicPlayer musicPlayer;
-    private LibraryMenu libraryMenu;
-    private Playlist oldPlaylist;
-    private Playlist playlist;
+    private Library library;
+    private Song song;
 
+    private final SimpleStringProperty title = new SimpleStringProperty();
+    private final SimpleStringProperty artist = new SimpleStringProperty();
 
-    private final SimpleStringProperty name = new SimpleStringProperty();
-
-    @FXML private TextField textField;
+    @FXML private TextField textFieldTitle;
+    @FXML private TextField textFieldArtist;
     @FXML private Button cancelButton;
     @FXML private Button confirmButton;
     @FXML private Button chooseCoverButton;
@@ -37,31 +35,33 @@ public class EditPlaylistMenu {
 
     private File file;
 
-    public EditPlaylistMenu() {}
+    public EditSongMenu() {}
 
-    public void initializeEditPlaylistMenu(Window window, Parent parent, Database database, MusicPlayer musicPlayer, LibraryMenu libraryMenu, Playlist playlist) {
+    public void initializeEditSongMenu(Window window, Parent parent, Database database, MusicPlayer musicPlayer, Library library, Song song) {
         this.database = database;
         this.musicPlayer = musicPlayer;
 
-        this.libraryMenu = libraryMenu;
-        this.playlist = playlist;
-        this.oldPlaylist = playlist;
+        this.library = library;
+        this.song = song;
 
         /*
          * Initialize the popup
          * with existing
          * playlist data
          */
-        textField.textProperty().bindBidirectional(name);
-        name.setValue(playlist.getName());
+        textFieldTitle.textProperty().bindBidirectional(title);
+        title.setValue(song.getTitle());
 
-        if (playlist.getFilePath() != null) {
+        textFieldArtist.textProperty().bindBidirectional(artist);
+        artist.setValue(song.getArtist());
+
+        /*if (playlist.getFilePath() != null) {
             file = new File(playlist.getFilePath());
             if (file.exists()) {
                 Image image = new Image(file.toURI().toString());
                 coverImage.setImage(image);
             }
-        }
+        }*/
 
 
 
@@ -89,7 +89,7 @@ public class EditPlaylistMenu {
          */
 
         // ADD MORE FORMAAAAAAAAAAAAATS FOR IMAGEEEEEEEEEEEEEES YOOOOO
-        FileChooser fileChooser = new FileChooser();
+        /*FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Change Cover Image");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg"));
         chooseCoverButton.setOnAction(evt -> {
@@ -98,7 +98,7 @@ public class EditPlaylistMenu {
                 Image image = new Image(file.toURI().toString());
                 coverImage.setImage(image);
             }
-        });
+        });*/
 
 
 
@@ -109,32 +109,37 @@ public class EditPlaylistMenu {
 
         Scene scene = new Scene(parent);
         stage.setScene(scene);
-        stage.setTitle("Edit Playlist");
+        stage.setTitle("Edit Song");
         stage.showAndWait();
     }
 
 
 
-    //TODO check file
     private boolean editPlaylist() {
-        if (name.get() == null || name.isEmpty().get()) {
-            textField.setStyle("-fx-border-color: red;");
-            textField.setOnKeyPressed(e -> textField.setStyle(""));
+        if (title.get() == null || title.isEmpty().get()) {
+            textFieldTitle.setStyle("-fx-border-color: red;");
+            textFieldTitle.setOnKeyPressed(e -> textFieldTitle.setStyle(""));
             return false;
         }
-        if (file != null) {
+
+        if (artist.get() == null || artist.isEmpty().get()) {
+            textFieldArtist.setStyle("-fx-border-color: red;");
+            textFieldArtist.setOnKeyPressed(e -> textFieldArtist.setStyle(""));
+            return false;
+        }
+
+
+        /*if (file != null) {
             playlist.setName(name.get());
             playlist.setFilePath(file.getAbsolutePath());
 
         } else {
             playlist.setName(name.get());
             playlist.setFilePath(null);
-        }
+        }*/
 
-        database.editPlaylist(playlist);
-        libraryMenu.editPlaylist(oldPlaylist, playlist);
-        int i = musicPlayer.getPlaylistSequence().indexOf(oldPlaylist);
-        musicPlayer.getPlaylistSequence().set(i, playlist);
+        database.editSong(song);
+        library.editSong(song);
         return true;
     }
 }

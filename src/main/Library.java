@@ -5,21 +5,23 @@ import containers.Song;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 import javafx.util.Callback;
+import popups.EditPlaylistMenu;
+import popups.EditSongMenu;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class Library {
 
-    // Never accessed, delete later if not needed
-    // @FXML private VBox root;
     @FXML private Label title;
     @FXML private ImageView coverImage;
     @FXML private TableView<Song> tableView;
@@ -29,6 +31,8 @@ public class Library {
     Player player;
 
     ObservableList<Song> songList;
+    //?
+    public ObservableList<Song> getSongList() { return songList; }
 
     public Library() {}
 
@@ -66,6 +70,33 @@ public class Library {
 
     public void addSong(Song song) {
         songList.add(song);
+    }
+
+    public void openEditSong(Song song) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editSongPopup.fxml"));
+            Parent parent = loader.load();
+
+            Window window = tableView.getScene().getWindow();
+
+            EditSongMenu editSongMenu = loader.getController();
+            editSongMenu.initializeEditSongMenu(window, parent, database, musicPlayer, this, song);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editSong(Song song) {
+        Song oldSong = songList.stream()
+            .filter(s -> s.getId() == song.getId())
+            .findFirst()
+            .orElse(null);
+
+        if (oldSong != null) {
+            int index = songList.indexOf(oldSong);
+            songList.set(index, song);
+        }
     }
 
 
@@ -265,8 +296,10 @@ public class Library {
 
                 });
 
-                MenuItem temp = new MenuItem("Edit TBD");
-                contextMenu.getItems().addAll(addToPlaylistMenu, temp);
+                MenuItem editSongItem = new MenuItem("Edit TBD");
+                editSongItem.setOnAction(e -> openEditSong(getItem()));
+
+                contextMenu.getItems().addAll(addToPlaylistMenu, editSongItem);
 
                 emptyProperty().addListener((obs, wasEmpty, isEmpty) -> {
                     setContextMenu(isEmpty ? null : contextMenu);

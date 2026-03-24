@@ -58,6 +58,33 @@ public class Database {
         }
     }
 
+
+
+    /**
+     * Function modifying existing entry in database.
+     * Updates all parameters except for ID and FILEPATH.
+     * @param song Song class object
+     */
+    public void editSong(Song song) {
+        String sql = "UPDATE songs " +
+                "SET title = ?, artist = ?, duration = ?, format = ? " +
+                "WHERE id = ?;";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, song.getTitle());
+            statement.setString(2, song.getArtist());
+            statement.setInt(3, song.getDuration());
+            statement.setString(4, song.getFormat());
+            statement.setInt(5, song.getId());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     /**
      *  Function deleting a song from the database.
      *  @param song Song class object
@@ -72,6 +99,8 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      *  Function retrieving all songs from the database.
